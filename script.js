@@ -22,7 +22,7 @@ document.querySelector('.check').addEventListener('click', function () {
 
 const loseSetup = function (msg, currScore) {
   document.querySelector('.message').textContent = msg;
-  if (currScore === 0) {
+  if (currScore <= 1) {
     document.querySelector('.number').textContent = secretNum;
     document.querySelector('.message').textContent = '😅 You lose!';
     document.body.style.backgroundColor = '#902222';
