@@ -1,8 +1,48 @@
 'use strict';
 
+const loseSetup = function (msg, currScore) {
+  set('.message', msg);
+  if (currScore <= 1) {
+    set('.number', secretNum);
+    set('.message', '😅 You lose!');
+    setBodyBackground('#902222');
+    setNumberWidth('30rem');
+  } else {
+    set('.score', currScore - 1);
+  }
+};
+
+const winSetup = function (msg, currScore, currHighscore) {
+  set('.message', msg);
+  set('.number', secretNum);
+  setBodyBackground('#60b347');
+  setNumberWidth('30rem');
+  if (currScore > currHighscore) {
+    set('.highscore', currScore);
+  }
+};
+
+const rand = (min, max) => Math.floor(Math.random() * max) + min;
+
+const setBodyBackground = function (color) {
+  document.querySelector('body').style.backgroundColor = color;
+};
+
+const setNumberWidth = function (width) {
+  document.querySelector('.number').style.width = width;
+};
+
+const set = function (k, v) {
+  document.querySelector(k).textContent = v;
+};
+
+const setInput = function (k, v) {
+  document.querySelector(k).value = v;
+};
+
 const minNum = 1;
 const maxNum = 20;
-let secretNum = Math.floor(Math.random() * maxNum) + minNum; // minNum <= secretNum <= maxNum
+let secretNum = rand(minNum, maxNum); // minNum <= secretNum <= maxNum
 document.querySelector('.check').addEventListener('click', function () {
   const guessNum = Number(document.querySelector('.guess').value);
   const currScore = Number(document.querySelector('.score').textContent);
@@ -10,7 +50,7 @@ document.querySelector('.check').addEventListener('click', function () {
     document.querySelector('.highscore').textContent
   );
   if (document.querySelector('.guess').value === '') {
-    document.querySelector('.message').textContent = '🛑 No input detected!';
+    set('.message', '🛑 No input detected!');
   } else if (guessNum === secretNum) {
     winSetup('🎉 Correct number!', currScore, currHighscore);
   } else if (guessNum < secretNum) {
@@ -20,31 +60,12 @@ document.querySelector('.check').addEventListener('click', function () {
   }
 });
 
-const loseSetup = function (msg, currScore) {
-  document.querySelector('.message').textContent = msg;
-  if (currScore <= 1) {
-    document.querySelector('.number').textContent = secretNum;
-    document.querySelector('.message').textContent = '😅 You lose!';
-    document.body.style.backgroundColor = '#902222';
-  } else {
-    document.querySelector('.score').textContent = currScore - 1;
-  }
-};
-
-const winSetup = function (msg, currScore, currHighscore) {
-  document.querySelector('.message').textContent = msg;
-  document.querySelector('.number').textContent = secretNum;
-  document.body.style.backgroundColor = '#60b347';
-  if (currScore > currHighscore) {
-    document.querySelector('.highscore').textContent = currScore;
-  }
-};
-
 document.querySelector('.again').addEventListener('click', function () {
-  secretNum = Math.floor(Math.random() * maxNum) + minNum;
-  document.body.style.backgroundColor = '#222';
-  document.querySelector('.score').textContent = maxNum;
-  document.querySelector('.guess').value = '';
-  document.querySelector('.message').textContent = 'Start guessing...';
-  document.querySelector('.number').textContent = '?';
+  secretNum = rand(minNum, maxNum);
+  setBodyBackground('#222');
+  setNumberWidth('15rem');
+  set('.score', maxNum);
+  setInput('.guess', '');
+  set('.message', 'Start guessing...');
+  set('.number', '?');
 });
